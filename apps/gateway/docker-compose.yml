@@ -1,4 +1,9 @@
 services:
+  eureka:
+    image: ${HS_EUREKA_IMAGE}
+    ports:
+      - ${HS_EUREKA_PORT:-8761}:8761
+
   gateway-gradle:
     profiles: ["from-gradle"]
     build:
