@@ -1,0 +1,16 @@
+services:
+  eureka-gradle:
+    profiles: ["from-gradle"]
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - ${HS_EUREKA_PORT:-8761}:8761
+
+  eureka-jar:
+    profiles: ["from-jar"]
+    build:
+      context: .
+      dockerfile: from-jar.dockerfile
+    ports:
+      - ${HS_EUREKA_PORT:-8761}:8761

@@ -1,0 +1,21 @@
+services:
+  gateway-gradle:
+    profiles: ["from-gradle"]
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - ${HS_GATEWAY_PORT:-8762}:8762
+    environment:
+      EUREKA_URI: ${HS_GATEWAY_EUREKA_URI:-http://eureka:8761/eureka}
+
+  gateway-jar:
+    profiles: ["from-jar"]
+    build:
+      context: .
+      dockerfile: from-jar.dockerfile
+    ports:
+      - ${HS_GATEWAY_PORT:-8762}:8762
+    environment:
+      EUREKA_URI: ${HS_GATEWAY_EUREKA_URI:-http://eureka:8761/eureka}
+
