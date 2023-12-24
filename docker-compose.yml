@@ -76,7 +76,7 @@ services:
     command: --defaults-file=/liquibase/liquibase.properties update
 
   hs-users:
-    image: ${HS_USERS_IMAGE:-mhws/hs-user:latest}
+    image: ${HS_USERS_IMAGE:-mhws/hs-users:latest}
     depends_on:
       liquibase-users:
         condition: service_completed_successfully
@@ -129,7 +129,7 @@ services:
     ports:
       - '8764:8764'
 
-  liquibase-box:
+  liquibase-box-office:
     image: liquibase/liquibase:4.24-alpine
     depends_on:
       postgres:
@@ -143,10 +143,10 @@ services:
       - ./services/liquibase/liquibase.box-office.properties:/liquibase/liquibase.properties
     command: --defaults-file=/liquibase/liquibase.properties update
 
-  hs-box:
-    image: ${HS_BOX_IMAGE:-mhws/hs-box:latest}
+  hs-box-office:
+    image: ${HS_BOX_IMAGE:-mhws/hs-box-office:latest}
     depends_on:
-      liquibase-box:
+      liquibase-box-office:
         condition: service_completed_successfully
       config-server:
         condition: service_healthy
