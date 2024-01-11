@@ -162,6 +162,39 @@ services:
     ports:
       - '9009:9009'
 
+  hs-files-compressor:
+    image: ${HS_FILE_COMPRESSOR_IMAGE:-mhws/hs-files-compressor:latest}
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+    environment:
+      HS_FILES_HOST: hs-files
+      HS_FILES_PORT: 8767
+      CONFIGSERVER_URI: http://config-server:8888
+    volumes:
+      - files:/paintings
+    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    ports:
+      - '8769:8769'
+
+  hs-files:
+    image: ${HS_FILE_COMPRESSOR_IMAGE:-mhws/hs-files:latest}
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+    environment:
+      HS_FILES_EUREKA_URI: http://eureka:8761/eureka
+      CONFIGSERVER_URI: http://config-server:8888
+    volumes:
+      - files:/pictures
+    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    ports:
+      - '8767:8767'
+
   gateway:
     image: ${HS_GATEWAY_IMAGE:-mhws/hs-gateway:latest}
     depends_on:
@@ -178,3 +211,4 @@ services:
 
 volumes:
   postgres-data:
+  files:
