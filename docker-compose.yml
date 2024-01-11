@@ -101,6 +101,8 @@ services:
         condition: service_healthy
       hs-eureka:
         condition: service_healthy
+      kafka:
+        condition: service_healthy
       liquibase-users:
         condition: service_completed_successfully
     environment:
