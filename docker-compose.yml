@@ -24,18 +24,12 @@ services:
     environment:
       CONFIGSERVER_URI: http://config-server:8888
     entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
-
-  gateway:
-    image: ${HS_GATEWAY_IMAGE:-mhws/hs-gateway:latest}
-    depends_on:
-      config-server:
-        condition: service_healthy
-    ports:
-      - ${HS_GATEWAY_PORT:-8762}:8762
-    environment:
-      HS_GATEWAY_EUREKA_URI: http://eureka:8761/eureka
-      CONFIGSERVER_URI: http://config-server:8888
-    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --fail --silent localhost:8761/actuator/health | grep UP || exit 1" ]
+      start_period: 60s
+      interval: 10s
+      timeout: 60s
+      retries: 5
 
   postgres:
     image: postgres:16.0-alpine
@@ -78,10 +72,12 @@ services:
   hs-users:
     image: ${HS_USERS_IMAGE:-mhws/hs-users:latest}
     depends_on:
-      liquibase-users:
-        condition: service_completed_successfully
       config-server:
         condition: service_healthy
+      eureka:
+        condition: service_healthy
+      liquibase-users:
+        condition: service_completed_successfully
     environment:
       HS_USER_EUREKA_URI: http://eureka:8761/eureka
       HS_USER_DATASOURCE_HOST: postgres
@@ -113,10 +109,12 @@ services:
   hs-cms:
     image: ${HS_CMS_IMAGE:-mhws/hs-cms:latest}
     depends_on:
-      liquibase-cms:
-        condition: service_completed_successfully
       config-server:
         condition: service_healthy
+      eureka:
+        condition: service_healthy
+      liquibase-cms:
+        condition: service_completed_successfully
     environment:
       HS_CMS_EUREKA_URI: http://eureka:8761/eureka
       HS_CMS_DATASOURCE_HOST: postgres
@@ -146,10 +144,12 @@ services:
   hs-box-office:
     image: ${HS_BOX_IMAGE:-mhws/hs-box-office:latest}
     depends_on:
-      liquibase-box-office:
-        condition: service_completed_successfully
       config-server:
         condition: service_healthy
+      eureka:
+        condition: service_healthy
+      liquibase-box-office:
+        condition: service_completed_successfully
     environment:
       HS_BOX_OFFICE_EUREKA_URI: http://eureka:8761/eureka
       HS_BOX_OFFICE_DATASOURCE_HOST: postgres
@@ -162,6 +162,19 @@ services:
     ports:
       - '9009:9009'
 
+  gateway:
+    image: ${HS_GATEWAY_IMAGE:-mhws/hs-gateway:latest}
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+    ports:
+      - ${HS_GATEWAY_PORT:-8762}:8762
+    environment:
+      HS_GATEWAY_EUREKA_URI: http://eureka:8761/eureka
+      CONFIGSERVER_URI: http://config-server:8888
+    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
 
 volumes:
   postgres-data:
