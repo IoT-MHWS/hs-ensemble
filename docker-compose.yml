@@ -110,6 +110,22 @@ services:
     ports:
       - '8763:8763'
 
+  notifications:
+    image: ${HS_NOTIFICATIONS_IMAGE:-mhws/hs-notifications:latest}
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+    environment:
+      HS_NOTIFICATIONS_EUREKA_URI: http://eureka:8761/eureka
+      HS_NOTIFICATIONS_KAFKA_URI: http://kafka:9092
+      HS_NOTIFICATIONS_MAIL_PASSWORD: ${HS_NOTIFICATIONS_MAIL_PASSWORD}
+      CONFIGSERVER_URI: http://config-server:8888
+    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    ports:
+      - '8079:8079'
+
   liquibase-cms:
     image: liquibase/liquibase:4.24-alpine
     depends_on:
