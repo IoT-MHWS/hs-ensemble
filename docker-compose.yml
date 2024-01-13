@@ -216,8 +216,7 @@ services:
         condition: service_healthy
     environment:
       HS_FILES_COMPRESSOR_EUREKA_URI: http://hs-eureka:8761/eureka
-      HS_FILES_HOST: hs-files
-      HS_FILES_PORT: 8767
+      HS_FILES_COMPRESSOR_URI: ws://hs-files:8767/ws
       CONFIGSERVER_URI: http://hs-config:8888
     volumes:
       - files:/paintings
