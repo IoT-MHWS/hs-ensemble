@@ -23,7 +23,7 @@ services:
       - ${HS_EUREKA_PORT:-8761}:8761
     environment:
       CONFIGSERVER_URI: http://hs-config:8888
-    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    command: application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
     healthcheck:
       test: [ "CMD-SHELL", "curl --fail --silent localhost:8761/actuator/health | grep UP || exit 1" ]
       start_period: 60s
@@ -116,7 +116,7 @@ services:
       HS_USER_JWT_SECRET_KEY: ${HS_USERS_JWT_SECRET_KEY}
       HS_USER_JWT_EXPIRATION: ${HS_USERS_JWT_EXPIRATION}
       CONFIGSERVER_URI: http://hs-config:8888
-    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    command: application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
     ports:
       - '8763:8763'
 
@@ -134,7 +134,7 @@ services:
       HS_NOTIFICATIONS_KAFKA_URI: http://kafka:9092
       HS_NOTIFICATIONS_MAIL_PASSWORD: ${HS_NOTIFICATIONS_MAIL_PASSWORD}
       CONFIGSERVER_URI: http://hs-config:8888
-    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    command: application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
     ports:
       - '8079:8079'
 
@@ -169,7 +169,7 @@ services:
       HS_CMS_DATASOURCE_USERNAME: ${HS_CMS_POSTGRES_USERNAME}
       HS_CMS_DATASOURCE_PASSWORD: ${HS_CMS_POSTGRES_PASSWORD}
       CONFIGSERVER_URI: http://hs-config:8888
-    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    command: application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
     ports:
       - '8764:8764'
 
@@ -204,7 +204,7 @@ services:
       HS_BOX_OFFICE_DATASOURCE_USERNAME: ${HS_BOX_POSTGRES_USERNAME}
       HS_BOX_OFFICE_DATASOURCE_PASSWORD: ${HS_BOX_POSTGRES_PASSWORD}
       CONFIGSERVER_URI: http://hs-config:8888
-    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    command: application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
     ports:
       - '9009:9009'
 
@@ -220,7 +220,7 @@ services:
       CONFIGSERVER_URI: http://hs-config:8888
     volumes:
       - files:/pictures
-    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    command: application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
     ports:
       - '8767:8767'
     healthcheck:
@@ -245,7 +245,7 @@ services:
       CONFIGSERVER_URI: http://hs-config:8888
     volumes:
       - files:/app/paintings
-    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    command: application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
     ports:
       - '8769:8769'
 
@@ -261,7 +261,7 @@ services:
     environment:
       HS_GATEWAY_EUREKA_URI: http://hs-eureka:8761/eureka
       CONFIGSERVER_URI: http://hs-config:8888
-    entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
+    command: application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
 
 volumes:
   postgres-data:
