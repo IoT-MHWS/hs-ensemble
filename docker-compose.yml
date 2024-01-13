@@ -244,7 +244,7 @@ services:
       HS_FILES_COMPRESSOR_URI: ws://hs-files:8767/ws
       CONFIGSERVER_URI: http://hs-config:8888
     volumes:
-      - files:/paintings
+      - files:/app/paintings
     entrypoint: java -jar application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
     ports:
       - '8769:8769'
