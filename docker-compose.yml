@@ -107,6 +107,7 @@ services:
         condition: service_completed_successfully
     environment:
       HS_USER_EUREKA_URI: http://hs-eureka:8761/eureka
+      HS_USER_KAFKA_URI: http://kafka:9092
       HS_USER_DATASOURCE_HOST: postgres
       HS_USER_DATASOURCE_PORT: 5432
       HS_USER_DATASOURCE_DATABASE: db_users
