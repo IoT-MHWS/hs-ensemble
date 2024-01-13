@@ -4,7 +4,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: ${HS_NOTIFICATIONS_EUREKA_URI:http://localhost:8761/eureka}
+      defaultZone: ${HS_NOTIFICATIONS_EUREKA_URI}
 
 art-mail:
   mail-subject: ArtGallery Notification
@@ -16,7 +16,7 @@ spring:
     username: artgalleryservice@mail.ru
     password: ${HS_NOTIFICATIONS_MAIL_PASSWORD}
   kafka:
-    bootstrap-servers: ${HS_NOTIFICATIONS_KAFKA_URI:http://localhost:9092}
+    bootstrap-servers: ${HS_NOTIFICATIONS_KAFKA_URI}
     consumer:
       max-poll-records: 100
       auto-offset-reset: earliest
