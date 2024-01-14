@@ -4,11 +4,11 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: ${HS_USER_EUREKA_URI}
+      defaultZone: ${HS_USER_EUREKA_URI:localhost:8654}
 
 spring:
   kafka:
-    bootstrap-servers: ${HS_USER_KAFKA_URI}
+    bootstrap-servers: ${HS_USER_KAFKA_URI:http://localhost:9092}
   datasource:
     url: jdbc:postgresql://${HS_USER_DATASOURCE_HOST}:${HS_USER_DATASOURCE_PORT}/${HS_USER_DATASOURCE_DATABASE}
     username: ${HS_USER_DATASOURCE_USERNAME}
@@ -27,6 +27,7 @@ application:
     jwt:
       secret-key: ${HS_USER_JWT_SECRET_KEY}
       expiration: ${HS_USER_JWT_EXPIRATION}
+
 
 springdoc:
   api-docs:
