@@ -55,30 +55,111 @@ services:
       timeout: 60s
       retries: 5
 
-  kafka:
-    image: docker.io/bitnami/kafka:3.6
-    ports:
-      - "9092:9092"
-    volumes:
-      - "kafka_data:/bitnami"
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
     environment:
-      # KRaft settings
-      - KAFKA_CFG_NODE_ID=0
-      - KAFKA_CFG_PROCESS_ROLES=controller,broker
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
-      # Listeners
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      ZOOKEEPER_CLIENT_PORT: 22000
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22000:22000
     healthcheck:
-      # https://github.com/bitnami/containers/issues/33325#issuecomment-1541443315
-      test: kafka-topics.sh --bootstrap-server kafka:9092 --topic hc --create --if-not-exists && kafka-topics.sh --bootstrap-server kafka:9092 --topic hc --describe || exit -1
-      start_period: 15s
-      interval: 5s
-      timeout: 10s
-      retries: 10
+      test: nc -z localhost 22000 || exit -1
+      start_interval: 60s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  kafka1:
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - 22001:29092
+    hostname: kafka1
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:22000
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:22001
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka1:22001 --list
+      start_interval: 60s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  kafka2:
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - 22002:29092
+    hostname: kafka2
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:22000
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:22002
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka2:22002 --list
+      start_interval: 60s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  kafka3:
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - 22003:29092
+    hostname: kafka3
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:22000
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:22003
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka3:22003 --list
+      start_interval: 60s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  kafka-ui:
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+      kafka1:
+        condition: service_healthy
+      kafka2:
+        condition: service_healthy
+      kafka3:
+        condition: service_healthy
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - 8090:8080
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:22001,kafka2:22002,kafka3:22003
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:22000
+    healthcheck:
+      test: nc -z localhost 8080 || exit -1
+      start_interval: 60s
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   liquibase-users:
     build:
@@ -102,13 +183,13 @@ services:
         condition: service_healthy
       hs-eureka:
         condition: service_healthy
-      kafka:
+      kafka-ui:
         condition: service_healthy
       liquibase-users:
         condition: service_completed_successfully
     environment:
       HS_USER_EUREKA_URI: http://hs-eureka:8761/eureka
-      HS_USER_KAFKA_URI: http://kafka:9092
+      HS_USER_KAFKA_URI: kafka1:22001,kafka2:22002,kafka3:22003
       HS_USER_DATASOURCE_HOST: postgres
       HS_USER_DATASOURCE_PORT: 5432
       HS_USER_DATASOURCE_DATABASE: db_users
@@ -128,11 +209,11 @@ services:
         condition: service_healthy
       hs-eureka:
         condition: service_healthy
-      kafka:
+      kafka-ui:
         condition: service_healthy
     environment:
       HS_NOTIFICATIONS_EUREKA_URI: http://hs-eureka:8761/eureka
-      HS_NOTIFICATIONS_KAFKA_URI: http://kafka:9092
+      HS_NOTIFICATIONS_KAFKA_URI: kafka1:22001,kafka2:22002,kafka3:22003
       HS_NOTIFICATIONS_MAIL_PASSWORD: ${HS_NOTIFICATIONS_MAIL_PASSWORD}
       CONFIGSERVER_URI: http://hs-config:8888
     command: application.jar --spring.cloud.config.enabled=true --spring.profiles.active=
