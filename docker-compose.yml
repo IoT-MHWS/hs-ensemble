@@ -168,7 +168,7 @@ services:
     ports:
       - ${HS_HAZELCAST_PORT:-5701}:5701
     volumes:
-      - ./services/hazelcast:/opt/hazelcast/config_ext
+      - ./config/hazelcast.yaml:/opt/hazelcast/config_ext/hazelcast.yaml
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:5701/hazelcast/health/node-state || exit 1" ]
       start_period: 60s
