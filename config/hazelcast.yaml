@@ -10,3 +10,8 @@ hazelcast:
         enabled: true
       multicast:
         enabled: false
+    rest-api:
+      enabled: true
+      endpoint-groups:
+        HEALTH_CHECK:
+          enabled: true
