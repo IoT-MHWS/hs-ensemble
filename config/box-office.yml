@@ -10,7 +10,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${HS_BOX_OFFICE_EUREKA_URI:http://localhost:8761/eureka}
+      defaultZone: ${HS_BOX_OFFICE_EUREKA_URI}
 
 springdoc:
   api-docs:
