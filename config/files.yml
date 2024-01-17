@@ -20,3 +20,25 @@ app:
         locations:
           raw: "/raw"
           compressed: "/compressed"
+  hazelcast:
+    addresses: ${HS_FILES_HAZELCAST_ADDRESSES}
+    cluster-name: ${HS_FILES_HAZELCAST_CLUSTER_NAME:donatello}
+    maps:
+      paintings-files-metadata: paintings-files-metadata
+      paintings-files-compressed: paintings-files-compressed
+      paintings-metadata: paintings-metadata
+
+spring:
+  kafka:
+    bootstrap-servers: ${HS_FILES_KAFKA_URI}
+    consumer:
+      max-poll-records: 100
+      auto-offset-reset: earliest
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG
+#        web: DEBUG
+#      hibernate: ERROR
