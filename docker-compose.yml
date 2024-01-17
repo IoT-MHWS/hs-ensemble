@@ -161,6 +161,29 @@ services:
       timeout: 5s
       retries: 3
 
+  hazelcast:
+    image: hazelcast/hazelcast:5.3-slim
+    environment:
+      JAVA_OPTS: "-Dhazelcast.config=/opt/hazelcast/config_ext/hazelcast.yaml"
+    ports:
+      - ${HS_HAZELCAST_PORT:-5701}:5701
+    volumes:
+      - ./services/hazelcast:/opt/hazelcast/config_ext
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:5701/hazelcast/health/node-state || exit 1" ]
+      start_period: 60s
+      interval: 10s
+      timeout: 60s
+      retries: 5
+
+  hazelcast-management-center:
+    image: hazelcast/management-center:5.3
+    depends_on:
+      hazelcast:
+        condition: service_healthy
+    ports:
+      - 8080:8080
+
   liquibase-users:
     build:
       context: services/liquibase
@@ -244,11 +267,14 @@ services:
         condition: service_healthy
       kafka-ui:
         condition: service_healthy
+      hazelcast:
+        condition: service_healthy
       liquibase-cms:
         condition: service_completed_successfully
     environment:
       HS_CMS_EUREKA_URI: http://hs-eureka:8761/eureka
       HS_CMS_KAFKA_URI: kafka1:22001,kafka2:22002,kafka3:22003
+      HS_CMS_HAZELCAST_ADDRESSES: hazelcast:5701
       HS_CMS_DATASOURCE_HOST: postgres
       HS_CMS_DATASOURCE_PORT: 5432
       HS_CMS_DATASOURCE_DATABASE: db_cms
@@ -307,9 +333,12 @@ services:
         condition: service_healthy
       kafka-ui:
         condition: service_healthy
+      hazelcast:
+        condition: service_healthy
     environment:
       HS_FILES_EUREKA_URI: http://hs-eureka:8761/eureka
       HS_FILES_KAFKA_URI: kafka1:22001,kafka2:22002,kafka3:22003
+      HS_FILES_HAZELCAST_ADDRESSES: hazelcast:5701
       CONFIGSERVER_URI: http://hs-config:8888
     volumes:
       - files:/pictures
