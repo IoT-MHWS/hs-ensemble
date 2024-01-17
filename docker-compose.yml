@@ -64,10 +64,10 @@ services:
       - 22000:22000
     healthcheck:
       test: nc -z localhost 22000 || exit -1
-      start_interval: 60s
+      start_period: 60s
       interval: 10s
-      timeout: 5s
-      retries: 3
+      timeout: 60s
+      retries: 5
 
   kafka1:
     depends_on:
@@ -86,10 +86,10 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
     healthcheck:
       test: kafka-topics --bootstrap-server kafka1:22001 --list
-      start_interval: 60s
+      start_period: 600s
       interval: 10s
-      timeout: 5s
-      retries: 3
+      timeout: 60s
+      retries: 5
 
   kafka2:
     depends_on:
@@ -108,10 +108,10 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
     healthcheck:
       test: kafka-topics --bootstrap-server kafka2:22002 --list
-      start_interval: 60s
+      start_period: 600s
       interval: 10s
-      timeout: 5s
-      retries: 3
+      timeout: 60s
+      retries: 5
 
   kafka3:
     depends_on:
@@ -130,10 +130,10 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
     healthcheck:
       test: kafka-topics --bootstrap-server kafka3:22003 --list
-      start_interval: 60s
+      start_period: 600s
       interval: 10s
-      timeout: 5s
-      retries: 3
+      timeout: 60s
+      retries: 5
 
   kafka-ui:
     depends_on:
@@ -156,9 +156,9 @@ services:
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:22000
     healthcheck:
       test: nc -z localhost 8080 || exit -1
-      start_interval: 60s
+      start_period: 60s
       interval: 10s
-      timeout: 5s
+      timeout: 60s
       retries: 3
 
   hazelcast:
