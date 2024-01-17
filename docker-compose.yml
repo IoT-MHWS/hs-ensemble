@@ -242,10 +242,13 @@ services:
         condition: service_healthy
       hs-eureka:
         condition: service_healthy
+      kafka-ui:
+        condition: service_healthy
       liquibase-cms:
         condition: service_completed_successfully
     environment:
       HS_CMS_EUREKA_URI: http://hs-eureka:8761/eureka
+      HS_CMS_KAFKA_URI: kafka1:22001,kafka2:22002,kafka3:22003
       HS_CMS_DATASOURCE_HOST: postgres
       HS_CMS_DATASOURCE_PORT: 5432
       HS_CMS_DATASOURCE_DATABASE: db_cms
@@ -278,10 +281,13 @@ services:
         condition: service_healthy
       hs-eureka:
         condition: service_healthy
+      kafka-ui:
+        condition: service_healthy
       liquibase-box-office:
         condition: service_completed_successfully
     environment:
       HS_BOX_OFFICE_EUREKA_URI: http://hs-eureka:8761/eureka
+      HS_BOX_OFFICE_KAFKA_URI: kafka1:22001,kafka2:22002,kafka3:22003
       HS_BOX_OFFICE_DATASOURCE_HOST: postgres
       HS_BOX_OFFICE_DATASOURCE_PORT: 5432
       HS_BOX_OFFICE_DATASOURCE_DATABASE: db_box_office
@@ -299,8 +305,11 @@ services:
         condition: service_healthy
       hs-eureka:
         condition: service_healthy
+      kafka-ui:
+        condition: service_healthy
     environment:
       HS_FILES_EUREKA_URI: http://hs-eureka:8761/eureka
+      HS_FILES_KAFKA_URI: kafka1:22001,kafka2:22002,kafka3:22003
       CONFIGSERVER_URI: http://hs-config:8888
     volumes:
       - files:/pictures
