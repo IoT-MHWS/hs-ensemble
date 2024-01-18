@@ -10,7 +10,7 @@ eureka:
           lower-case-service-id: true
   client:
     service-url:
-      defaultZone: ${HS_GATEWAY_EUREKA_URI}
+      defaultZone: ${HS_GATEWAY_EUREKA_URI:http://localhost:8375/eureka}
 
 reactive:
   feign:
@@ -46,12 +46,12 @@ spring:
           filters:
             - RewritePath=/users/(?<path>.*), /$\{path}
 
-        - id: files-pictures
+        - id: files-pictures-inner
           uri: lb://files
           predicates:
-            - Path=/api/v1/paintings/{id}/files
+            - Path=/api/v1/paintings/{id}/files/**
           filters:
-            - RewritePath=/api/v1/paintings/(?<id>.*)/files, /api/v1/paintings/$\{id}
+            - RewritePath=/api/v1/paintings/(?<id>.*)/files(?<rest>/.*)?, /api/v1/paintings/${id}${rest}
             - AuthFilter
 
         - id: files-openapi
