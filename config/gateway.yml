@@ -46,12 +46,12 @@ spring:
           filters:
             - RewritePath=/users/(?<path>.*), /$\{path}
 
-        - id: files-pictures
+        - id: files-pictures-inner
           uri: lb://files
           predicates:
-            - Path=/api/v1/paintings/{id}/files
+            - Path=/api/v1/paintings/{id}/files/**
           filters:
-            - RewritePath=/api/v1/paintings/(?<id>.*)/files, /api/v1/paintings/$\{id}
+            - RewritePath=/api/v1/paintings/(?<id>.*)/files(?<rest>/.*)?, /api/v1/paintings/${id}${rest}
             - AuthFilter
 
         - id: files-openapi

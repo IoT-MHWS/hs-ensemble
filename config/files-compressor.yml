@@ -7,4 +7,4 @@ app:
       fs:
         mount: ${HS_FILES_PAINTINGS_VOLUME:./paintings}
     client:
-      server-urls: ${HS_FILES_CLIENT_SERVER_URLS:ws://localhost:8767/ws}
+      server-urls: ${HS_FILES_CLIENT_SERVER_URLS}
