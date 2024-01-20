@@ -34,7 +34,8 @@ spec:
         service: kafka
     spec:
       securityContext:
-        fsGroup: 1000
+        runAsUser: 0
+        runAsGroup: 0
       enableServiceLinks: false
       containers:
       - name: kafka
