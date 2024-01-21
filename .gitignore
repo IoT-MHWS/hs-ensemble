@@ -8,3 +8,4 @@ build/
 
 # kubernetes secrets
 postgres/postgres-config-sercets.yml
+services/hs-users-secrets.yml
