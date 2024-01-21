@@ -5,11 +5,11 @@ metadata:
     service: zookeeper
   name: zookeeper
 spec:
+  selector:
+    service: zookeeper
   ports:
     - port: 22000
       targetPort: 22000
-  selector:
-    service: zookeeper
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -34,19 +34,19 @@ spec:
       enableServiceLinks: false
       containers:
         - name: zookeeper
-          imagePullPolicy: IfNotPresent
           image: confluentinc/cp-zookeeper:7.3.2
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 22000
+          volumeMounts:
+            - mountPath: /var/lib/zookeeper/data
+              name: zookeeper-data
+          resources: { }
           env:
             - name: ZOOKEEPER_CLIENT_PORT
               value: "22000"
             - name: ZOOKEEPER_DATA_DIR
               value: "/var/lib/zookeeper/data"
-          resources: {}
-          volumeMounts:
-            - mountPath: /var/lib/zookeeper/data
-              name: zookeeper-data
           livenessProbe:
             exec:
               command:
