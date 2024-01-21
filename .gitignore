@@ -5,3 +5,6 @@ bin/
 .project
 build/
 .env
+
+# kubernetes secrets
+postgres/postgres-config-sercets.yml
