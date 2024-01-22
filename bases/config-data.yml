@@ -19,6 +19,8 @@ data:
         password: ${HS_BOX_OFFICE_DATASOURCE_PASSWORD}
 
     eureka:
+      instance:
+        hostname: hs-box-office
       client:
         serviceUrl:
           defaultZone: ${HS_BOX_OFFICE_EUREKA_URI}
@@ -52,6 +54,8 @@ data:
       port: 8764
 
     eureka:
+      instance:
+        hostname: hs-cms
       client:
         service-url:
           defaultZone: ${HS_CMS_EUREKA_URI}
@@ -128,6 +132,8 @@ data:
       port: 8767
 
     eureka:
+      instance:
+        hostname: hs-files
       client:
         service-url:
           defaultZone: ${HS_FILES_EUREKA_URI}
@@ -179,6 +185,8 @@ data:
             locator:
               enabled: true
               lower-case-service-id: true
+      instance:
+        hostname: hs-cms
       client:
         service-url:
           defaultZone: ${HS_GATEWAY_EUREKA_URI:http://localhost:8375/eureka}
@@ -364,6 +372,8 @@ data:
       port: 8763
 
     eureka:
+      instance:
+        hostname: hs-users
       client:
         service-url:
           defaultZone: ${HS_USER_EUREKA_URI}
