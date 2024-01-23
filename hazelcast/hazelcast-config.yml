@@ -7,17 +7,10 @@ data:
     hazelcast:
       cluster-name: donatello
       network:
-        port:
-          auto-increment: true
-          port: 5701
-          port-count: 20
         join:
-          auto-detection:
+          kubernetes:
             enabled: true
-          multicast:
-            enabled: false
+            namespace: default
+            service-name: hazelcast
         rest-api:
           enabled: true
-          endpoint-groups:
-            HEALTH_CHECK:
-              enabled: true
