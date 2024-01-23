@@ -29,7 +29,7 @@ spec:
       containers:
         - name: hs-eureka
           image: mhws/hs-eureka:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args:
             - application.jar
             - --spring.cloud.config.enabled=true

@@ -29,7 +29,7 @@ spec:
       containers:
         - name: hs-files
           image: mhws/hs-files:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args:
             - application.jar
             - --spring.cloud.config.enabled=true

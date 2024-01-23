@@ -186,7 +186,7 @@ data:
               enabled: true
               lower-case-service-id: true
       instance:
-        hostname: hs-cms
+        hostname: hs-gateway
       client:
         service-url:
           defaultZone: ${HS_GATEWAY_EUREKA_URI:http://localhost:8375/eureka}
@@ -331,6 +331,8 @@ data:
       port: 8079
 
     eureka:
+      instance:
+        hostname: hs-notifications
       client:
         service-url:
           defaultZone: ${HS_NOTIFICATIONS_EUREKA_URI}

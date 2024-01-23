@@ -27,7 +27,7 @@ spec:
       containers:
         - name: hs-config
           image: mhws/hs-config:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8888
           volumeMounts:

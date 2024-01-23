@@ -29,7 +29,7 @@ spec:
       containers:
         - name: hs-notifications
           image: mhws/hs-notifications:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args:
             - application.jar
             - --spring.cloud.config.enabled=true

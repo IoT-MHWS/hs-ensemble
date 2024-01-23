@@ -29,7 +29,7 @@ spec:
       containers:
         - name: hs-gateway
           image: mhws/hs-gateway:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args:
             - application.jar
             - --spring.cloud.config.enabled=true

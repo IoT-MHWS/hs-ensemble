@@ -29,7 +29,7 @@ spec:
       initContainers:
         - name: liquibase-cms
           image: mhws/liquibase-hs-cms:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args:
             - --defaults-file=/liquibase/liquibase.properties
             - update
@@ -49,7 +49,7 @@ spec:
       containers:
         - name: hs-cms
           image: mhws/hs-cms:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args:
             - application.jar
             - --spring.cloud.config.enabled=true
