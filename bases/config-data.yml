@@ -326,24 +326,6 @@ data:
     #     reactor.netty.http.client: DEBUG
     #    org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: trace
     #    io.github.resilience4j: debug
-  hazelcast.yaml: |
-    hazelcast:
-      cluster-name: donatello
-      network:
-        port:
-          auto-increment: true
-          port: 5701
-          port-count: 20
-        join:
-          auto-detection:
-            enabled: true
-          multicast:
-            enabled: false
-        rest-api:
-          enabled: true
-          endpoint-groups:
-            HEALTH_CHECK:
-              enabled: true
   notifications.yml: |
     server:
       port: 8079

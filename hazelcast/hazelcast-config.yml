@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hazelcast-config-data
+data:
+  hazelcast.yml: |
+    hazelcast:
+      cluster-name: donatello
+      network:
+        port:
+          auto-increment: true
+          port: 5701
+          port-count: 20
+        join:
+          auto-detection:
+            enabled: true
+          multicast:
+            enabled: false
+        rest-api:
+          enabled: true
+          endpoint-groups:
+            HEALTH_CHECK:
+              enabled: true
