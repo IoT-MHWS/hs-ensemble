@@ -14,3 +14,11 @@ data:
             service-name: hazelcast
         rest-api:
           enabled: true
+  hazelcast-client.yml: |-
+    hazelcast-client:
+      cluster-name: donatello
+      network:
+        kubernetes:
+          enabled: true
+          namespace: default
+          service-name: hazelcast
