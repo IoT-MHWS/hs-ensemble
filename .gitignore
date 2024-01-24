@@ -5,3 +5,8 @@ bin/
 .project
 build/
 .env
+
+# kubernetes secrets
+postgres/postgres-config-sercets.yml
+services/hs-users-secrets.yml
+services/hs-notifications-secrets.yml
